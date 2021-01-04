@@ -2,6 +2,7 @@
     {
         "uuid": "10bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "red",
+        "name": "",
         "tempCali": 0,
         "sgCali": 0,
         "loggingURL": ""
@@ -9,6 +10,7 @@
     {
         "uuid": "20bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "green",
+        "name": "",
         "tempCali": 0,
         "sgCali": 0,
         "loggingURL": ""
@@ -16,6 +18,7 @@
     {
         "uuid": "30bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "black",
+        "name": "Other Half Daydream,64544",
         "tempCali": 1.7,
         "sgCali": 0.001,
         "loggingURL": "http://log.brewfather.net/tilt?id=W5z6kY2sVkJCO1"
@@ -23,6 +26,7 @@
     {
         "uuid": "40bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "purple",
+        "name": "",
         "tempCali": 0,
         "sgCali": 0,
         "loggingURL": ""
@@ -30,6 +34,7 @@
     {
         "uuid": "50bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "orange",
+        "name": "",
         "tempCali": 0,
         "sgCali": 0,
         "loggingURL": ""
@@ -37,6 +42,7 @@
     {
         "uuid": "60bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "blue",
+        "name": "",
         "tempCali": 0,
         "sgCali": 0,
         "loggingURL": ""
@@ -44,6 +50,7 @@
     {
         "uuid": "70bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "yellow",
+        "name": "",
         "tempCali": 0,
         "sgCali": 0,
         "loggingURL": ""
@@ -51,6 +58,7 @@
     {
         "uuid": "80bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "pink",
+        "name": "",
         "tempCali": 0,
         "sgCali": 0,
         "loggingURL": ""
