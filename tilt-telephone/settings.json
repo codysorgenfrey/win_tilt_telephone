@@ -1,0 +1,58 @@
+[
+    {
+        "uuid": "10bb95a4-b1c5-444b-b512-1370f02d74de",
+        "color": "red",
+        "tempCali": 0,
+        "sgCali": 0,
+        "loggingURL": ""
+    },
+    {
+        "uuid": "20bb95a4-b1c5-444b-b512-1370f02d74de",
+        "color": "green",
+        "tempCali": 0,
+        "sgCali": 0,
+        "loggingURL": ""
+    },
+    {
+        "uuid": "30bb95a4-b1c5-444b-b512-1370f02d74de",
+        "color": "black",
+        "tempCali": 1.7,
+        "sgCali": 0.001,
+        "loggingURL": "http://log.brewfather.net/tilt?id=W5z6kY2sVkJCO1"
+    },
+    {
+        "uuid": "40bb95a4-b1c5-444b-b512-1370f02d74de",
+        "color": "purple",
+        "tempCali": 0,
+        "sgCali": 0,
+        "loggingURL": ""
+    },
+    {
+        "uuid": "50bb95a4-b1c5-444b-b512-1370f02d74de",
+        "color": "orange",
+        "tempCali": 0,
+        "sgCali": 0,
+        "loggingURL": ""
+    },
+    {
+        "uuid": "60bb95a4-b1c5-444b-b512-1370f02d74de",
+        "color": "blue",
+        "tempCali": 0,
+        "sgCali": 0,
+        "loggingURL": ""
+    },
+    {
+        "uuid": "70bb95a4-b1c5-444b-b512-1370f02d74de",
+        "color": "yellow",
+        "tempCali": 0,
+        "sgCali": 0,
+        "loggingURL": ""
+    },
+    {
+        "uuid": "80bb95a4-b1c5-444b-b512-1370f02d74de",
+        "color": "pink",
+        "tempCali": 0,
+        "sgCali": 0,
+        "loggingURL": ""
+    }
+]
