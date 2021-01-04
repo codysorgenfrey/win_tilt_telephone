@@ -1,11 +1,12 @@
 ﻿using System;
-using Windows.Devices.Bluetooth.Advertisement;
-using Beacons;
+using System.Diagnostics;
 using System.IO;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Timers;
 using System.Net.Http;
+using Windows.Devices.Bluetooth.Advertisement;
+using Beacons;
+using Newtonsoft.Json;
 
 namespace tilt_telephone
 {
@@ -22,14 +23,15 @@ namespace tilt_telephone
     {
         static private List<TiltSetting> tilts;
         static private Timer timer;
-        static private int bluetoothTimeout = 10000;
+        static private int bluetoothTimeout = 30000;
         static private bool mainThreadWait;
         static private iBeaconData curTilt;
         static private readonly HttpClient client = new HttpClient();
 
         static void Main(string[] args)
         {
-            var json = File.ReadAllText("tilt-telephone.json");
+            var settingsFile = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\tilt-telephone.json";
+            var json = File.ReadAllText(settingsFile);
             tilts = JsonConvert.DeserializeObject<List<TiltSetting>>(json);
             foreach (TiltSetting tilt in tilts)
             {
@@ -39,7 +41,7 @@ namespace tilt_telephone
                     UUID = Guid.Parse(tilt.uuid)
                 });
 
-                Console.Write("Looking for a {0} tilt", tilt.color);
+                Console.WriteLine("{1}: Looking for a {0} tilt", tilt.color, DateTime.Now.ToString());
                 timer = new Timer(bluetoothTimeout);
                 timer.Elapsed += OnTimerElapsed;
                 mainThreadWait = true;
@@ -53,10 +55,9 @@ namespace tilt_telephone
                 watcher.Stop();
                 timer.Stop();
 
-                Console.Write("\n");
                 if (curTilt != null)
                 {
-                    Console.WriteLine("    Found a {0} tilt.", tilt.color);
+                    Console.WriteLine("{1}:    Found a {0} tilt.", tilt.color, DateTime.Now.ToString());
                     float gravity = (curTilt.Minor / 1000.00f) + tilt.sgCali;
                     float temp = curTilt.Major + tilt.tempCali;
                     LogToCloud(tilt, temp, gravity);
@@ -67,15 +68,15 @@ namespace tilt_telephone
                     continue;
                 }
 
-                Console.WriteLine("No {0} tilt found.", tilt.color);
+                Console.WriteLine("{1}: No {0} tilt found.", tilt.color, DateTime.Now.ToString());
             }
         }
 
         private static async void LogToCloud(TiltSetting tilt, float temp, float gravity)
         {
-            Console.WriteLine("    Logging to cloud...");
-            Console.WriteLine("        Gravity: {0}", gravity);
-            Console.WriteLine("        Temp: {0}", temp);
+            Console.WriteLine("{0}:    Logging to cloud...", DateTime.Now.ToString());
+            Console.WriteLine("{1}:        Gravity: {0}", gravity, DateTime.Now.ToString());
+            Console.WriteLine("{1}:        Temp: {0}", temp, DateTime.Now.ToString());
             var values = new Dictionary<string, string>
                     {
                         { "Beer", tilt.name },
@@ -88,7 +89,7 @@ namespace tilt_telephone
             var content = new FormUrlEncodedContent(values);
             var response = await client.PostAsync(tilt.loggingURL, content);
             var responseString = await response.Content.ReadAsStringAsync();
-            Console.WriteLine("    {0}", responseString);
+            Console.WriteLine("{1}:    {0}", responseString, DateTime.Now.ToString());
             mainThreadWait = false;
         }
 
