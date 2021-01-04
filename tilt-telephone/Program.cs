@@ -18,12 +18,12 @@ namespace tilt_telephone
         public float tempCali;
         public float sgCali;
         public string loggingURL;
+        public int connectionTimeout;
     }
     class Program
     {
         static private List<TiltSetting> tilts;
         static private Timer timer;
-        static private int bluetoothTimeout = 30000;
         static private bool mainThreadWait;
         static private iBeaconData curTilt;
         static private readonly HttpClient client = new HttpClient();
@@ -42,7 +42,7 @@ namespace tilt_telephone
                 });
 
                 Console.WriteLine("{1}: Looking for a {0} tilt", tilt.color, DateTime.Now.ToString());
-                timer = new Timer(bluetoothTimeout);
+                timer = new Timer(tilt.connectionTimeout);
                 timer.Elapsed += OnTimerElapsed;
                 mainThreadWait = true;
                 curTilt = null;
