@@ -3,8 +3,8 @@
         "uuid": "10bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "red",
         "name": "",
-        "tempCali": 0,
-        "sgCali": 0.000,
+        "tempCali": [],
+        "sgCali": [],
         "loggingURL": "",
         "connectionTimeout": 60000
     },
@@ -12,8 +12,8 @@
         "uuid": "20bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "green",
         "name": "",
-        "tempCali": 0,
-        "sgCali": 0.000,
+        "tempCali": [],
+        "sgCali": [],
         "loggingURL": "",
         "connectionTimeout": 60000
     },
@@ -21,8 +21,12 @@
         "uuid": "30bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "black",
         "name": "",
-        "tempCali": 0,
-        "sgCali": 0.000,
+        "tempCali": [
+            { "precal": 60.0, "corrected": 61.0 }
+        ],
+        "sgCali":[
+            { "precal": 0.999, "corrected": 1.000 }
+        ],
         "loggingURL": "",
         "connectionTimeout": 60000
     },
@@ -30,8 +34,8 @@
         "uuid": "40bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "purple",
         "name": "",
-        "tempCali": 0,
-        "sgCali": 0.000,
+        "tempCali": [],
+        "sgCali": [],
         "loggingURL": "",
         "connectionTimeout": 60000
     },
@@ -39,8 +43,8 @@
         "uuid": "50bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "orange",
         "name": "",
-        "tempCali": 0,
-        "sgCali": 0.000,
+        "tempCali": [],
+        "sgCali": [],
         "loggingURL": "",
         "connectionTimeout": 60000
     },
@@ -48,8 +52,8 @@
         "uuid": "60bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "blue",
         "name": "",
-        "tempCali": 0,
-        "sgCali": 0.000,
+        "tempCali": [],
+        "sgCali": [],
         "loggingURL": "",
         "connectionTimeout": 60000
     },
@@ -57,8 +61,8 @@
         "uuid": "70bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "yellow",
         "name": "",
-        "tempCali": 0,
-        "sgCali": 0.000,
+        "tempCali": [],
+        "sgCali": [],
         "loggingURL": "",
         "connectionTimeout": 60000
     },
@@ -66,8 +70,8 @@
         "uuid": "80bb95a4-b1c5-444b-b512-1370f02d74de",
         "color": "pink",
         "name": "",
-        "tempCali": 0,
-        "sgCali": 0.000,
+        "tempCali": [],
+        "sgCali": [],
         "loggingURL": "",
         "connectionTimeout": 60000
     }
