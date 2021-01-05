@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Timers;
 using System.Net.Http;
+using System.Linq;
 using Windows.Devices.Bluetooth.Advertisement;
 using Beacons;
 using Newtonsoft.Json;
@@ -15,10 +16,15 @@ namespace tilt_telephone
         public string uuid;
         public string color;
         public string name;
-        public float tempCali;
-        public float sgCali;
+        public List<TiltCaliSetting> tempCali;
+        public List<TiltCaliSetting> sgCali;
         public string loggingURL;
         public int connectionTimeout;
+    }
+    class TiltCaliSetting
+    {
+        public float precal;
+        public float corrected;
     }
     class Program
     {
@@ -58,10 +64,10 @@ namespace tilt_telephone
                 if (curTilt != null)
                 {
                     Console.WriteLine("{1}:    Found a {0} tilt.", tilt.color, DateTime.Now.ToString());
-                    float gravity = (curTilt.Minor / 1000.00f) + tilt.sgCali;
-                    float temp = curTilt.Major + tilt.tempCali;
-                    LogToCloud(tilt, temp, gravity);
+                    float gravity = GetCalibrated(curTilt.Minor / 1000.00f, tilt.sgCali);
+                    float temp = GetCalibrated(curTilt.Major, tilt.tempCali);
                     mainThreadWait = true;
+                    LogToCloud(tilt, temp, gravity);
                     while (mainThreadWait)
                     {
                     }
@@ -70,6 +76,33 @@ namespace tilt_telephone
 
                 Console.WriteLine("{1}: No {0} tilt found.", tilt.color, DateTime.Now.ToString());
             }
+        }
+
+        private static float GetCalibrated(float input, List<TiltCaliSetting> cali)
+        {
+            if (cali.Count == 0)
+                return input;
+            else if (cali.Count == 1)
+                return input + (cali[0].corrected - cali[0].precal);
+            else
+            {
+                List<TiltCaliSetting> orderedCali = cali.OrderBy(obj => obj.precal).ToList();
+                for (var x = 0; x <= (orderedCali.Count - 1); x += 1)
+                {
+                    if (input <= orderedCali[x].precal)
+                        return input + (orderedCali[x].corrected - orderedCali[x].precal);
+                    else if (x + 1 == orderedCali.Count && input >= orderedCali[x + 1].precal)
+                        return input + (orderedCali[x + 1].corrected - orderedCali[x + 1].precal);
+
+                    var inMin = orderedCali[x].precal;
+                    var inMax = orderedCali[x + 1].precal;
+                    var outMin = orderedCali[x].corrected - orderedCali[x].precal;
+                    var outMax = orderedCali[x + 1].corrected - orderedCali[x + 1].precal;
+                    var correction = ((input - inMin) / (inMax - inMin)) * ((outMax - outMin) + outMin);
+                    return input + correction;
+                }
+            }
+            return input;
         }
 
         private static async void LogToCloud(TiltSetting tilt, float temp, float gravity)
