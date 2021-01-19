@@ -2,7 +2,7 @@
 A simple Windows 10 utiltiy that will read the sensor info from the Tilt Hydrometer and push it to the cloud logging solution of your choice.
 
 ## Version
-Latest version `1.1`
+Latest version `1.2`
 * Added support for multi-point calibration.
 
 ## Usage
