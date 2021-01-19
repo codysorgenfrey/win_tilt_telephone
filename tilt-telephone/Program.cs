@@ -111,17 +111,22 @@ namespace tilt_telephone
                 List<TiltCaliSetting> orderedCali = cali.OrderBy(obj => obj.precal).ToList();
                 for (var x = 0; x <= (orderedCali.Count - 1); x += 1)
                 {
-                    if (input <= orderedCali[x].precal)
-                        return input + (orderedCali[x].corrected - orderedCali[x].precal);
-                    else if (x + 1 == orderedCali.Count && input >= orderedCali[x + 1].precal)
-                        return input + (orderedCali[x + 1].corrected - orderedCali[x + 1].precal);
+                    var lower = orderedCali[x];
+                    var upper = orderedCali[x + 1];
 
-                    var inMin = orderedCali[x].precal;
-                    var inMax = orderedCali[x + 1].precal;
-                    var outMin = orderedCali[x].corrected - orderedCali[x].precal;
-                    var outMax = orderedCali[x + 1].corrected - orderedCali[x + 1].precal;
+                    var inMin = lower.precal;
+                    var inMax = upper.precal;
+                    var outMin = lower.corrected - lower.precal;
+                    var outMax = upper.corrected - upper.precal;
                     var correction = ((input - inMin) / (inMax - inMin)) * ((outMax - outMin) + outMin);
-                    return input + correction;
+
+                    // if these "ifs" aren't met, then try the next pair by doing nothing
+                    if (input <= lower.precal)
+                        return input + correction;
+                    else if (input >= lower.precal && input <= upper.precal)
+                        return input + correction;
+                    else if (x + 1 == orderedCali.Count)
+                        return input + correction;
                 }
             }
             return input;
