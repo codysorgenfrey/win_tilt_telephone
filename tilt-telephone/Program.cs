@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Timers;
 using System.Net.Http;
 using System.Linq;
+using System.Threading;
 using Windows.Devices.Bluetooth.Advertisement;
 using Beacons;
 using Newtonsoft.Json;
+using NDesk.Options;
 
 namespace tilt_telephone
 {
@@ -29,52 +31,72 @@ namespace tilt_telephone
     class Program
     {
         static private List<TiltSetting> tilts;
-        static private Timer timer;
+        static private System.Timers.Timer timer;
         static private bool mainThreadWait;
         static private iBeaconData curTilt;
         static private readonly HttpClient client = new HttpClient();
 
         static void Main(string[] args)
         {
-            var settingsFile = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\tilt-telephone.json";
-            var json = File.ReadAllText(settingsFile);
-            tilts = JsonConvert.DeserializeObject<List<TiltSetting>>(json);
-            foreach (TiltSetting tilt in tilts)
+            float repeat = 0.0f;
+            var p = new OptionSet() {
+                { "r|repeat=", "The number of mintutes to wait before logging again.",
+                   (float v) => repeat = v },
+            };
+            List<string> extra;
+            try
             {
-                var watcher = new BluetoothLEAdvertisementWatcher();
-                watcher.Received += OnAdvertisementRecieved;
-                watcher.AdvertisementFilter.Advertisement.iBeaconSetAdvertisement(new iBeaconData(){
-                    UUID = Guid.Parse(tilt.uuid)
-                });
+                extra = p.Parse(args);
 
-                Console.WriteLine("{1}: Looking for a {0} tilt", tilt.color, DateTime.Now.ToString());
-                timer = new Timer(tilt.connectionTimeout);
-                timer.Elapsed += OnTimerElapsed;
-                mainThreadWait = true;
-                curTilt = null;
-
-                timer.Start();
-                watcher.Start();
-                while (mainThreadWait)
-                {
-                }
-                watcher.Stop();
-                timer.Stop();
-
-                if (curTilt != null)
-                {
-                    Console.WriteLine("{1}:    Found a {0} tilt.", tilt.color, DateTime.Now.ToString());
-                    float gravity = GetCalibrated(curTilt.Minor / 1000.00f, tilt.sgCali);
-                    float temp = GetCalibrated(curTilt.Major, tilt.tempCali);
-                    mainThreadWait = true;
-                    LogToCloud(tilt, temp, gravity);
-                    while (mainThreadWait)
+                do {
+                    var settingsFile = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + @"\tilt-telephone.json";
+                    var json = File.ReadAllText(settingsFile);
+                    tilts = JsonConvert.DeserializeObject<List<TiltSetting>>(json);
+                    foreach (TiltSetting tilt in tilts)
                     {
-                    }
-                    continue;
-                }
+                        var watcher = new BluetoothLEAdvertisementWatcher();
+                        watcher.Received += OnAdvertisementRecieved;
+                        watcher.AdvertisementFilter.Advertisement.iBeaconSetAdvertisement(new iBeaconData() {
+                            UUID = Guid.Parse(tilt.uuid)
+                        });
 
-                Console.WriteLine("{1}: No {0} tilt found.", tilt.color, DateTime.Now.ToString());
+                        Console.WriteLine("{1}: Looking for a {0} tilt", tilt.color, DateTime.Now.ToString());
+                        timer = new System.Timers.Timer(tilt.connectionTimeout);
+                        timer.Elapsed += OnTimerElapsed;
+                        mainThreadWait = true;
+                        curTilt = null;
+
+                        timer.Start();
+                        watcher.Start();
+                        while (mainThreadWait)
+                        {
+                        }
+                        watcher.Stop();
+                        timer.Stop();
+
+                        if (curTilt != null)
+                        {
+                            Console.WriteLine("{1}:    Found a {0} tilt.", tilt.color, DateTime.Now.ToString());
+                            float gravity = GetCalibrated(curTilt.Minor / 1000.00f, tilt.sgCali);
+                            float temp = GetCalibrated(curTilt.Major, tilt.tempCali);
+                            mainThreadWait = true;
+                            LogToCloud(tilt, temp, gravity);
+                            while (mainThreadWait)
+                            {
+                            }
+                            continue;
+                        }
+
+                        Console.WriteLine("{1}: No {0} tilt found.", tilt.color, DateTime.Now.ToString());
+                    }
+                    int timeout = (int)(Math.Round(repeat * 60 * 1000));
+                    Thread.Sleep(timeout);
+                } while (repeat != 0.0f);
+            }
+            catch (OptionException e)
+            {
+                Console.WriteLine(e.Message);
+                return;
             }
         }
 
