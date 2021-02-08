@@ -118,7 +118,7 @@ namespace tilt_telephone
                     var inMax = upper.precal;
                     var outMin = lower.corrected - lower.precal;
                     var outMax = upper.corrected - upper.precal;
-                    var correction = ((input - inMin) / (inMax - inMin)) * ((outMax - outMin) + outMin);
+                    var correction = (input - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
 
                     // if these "ifs" aren't met, then try the next pair by doing nothing
                     if (input <= lower.precal)

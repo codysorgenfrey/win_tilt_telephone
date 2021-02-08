@@ -2,7 +2,7 @@
   "profiles": {
     "tilt-telephone": {
       "commandName": "Project",
-      "commandLineArgs": "--repeat=0.5"
+      "commandLineArgs": "--repeat=15"
     }
   }
 }
