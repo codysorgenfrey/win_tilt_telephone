@@ -70,6 +70,7 @@ namespace tilt_telephone
                         watcher.Start();
                         while (mainThreadWait)
                         {
+                            Thread.Sleep(500);
                         }
                         watcher.Stop();
                         timer.Stop();
@@ -83,6 +84,7 @@ namespace tilt_telephone
                             LogToCloud(tilt, temp, gravity);
                             while (mainThreadWait)
                             {
+                                Thread.Sleep(500);
                             }
                             continue;
                         }
@@ -161,7 +163,6 @@ namespace tilt_telephone
         private static void OnAdvertisementRecieved(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs eventArgs)
         {
             var beaconData = eventArgs.Advertisement.iBeaconParseAdvertisement(eventArgs.RawSignalStrengthInDBm);
-
             if (beaconData == null)
                 return;
 
