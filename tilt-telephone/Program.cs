@@ -77,6 +77,7 @@ namespace tilt_telephone
                         if (curTilt != null)
                         {
                             Console.WriteLine("{1}:    Found a {0} tilt.", tilt.color, DateTime.Now.ToString());
+                            Console.WriteLine("{0}:      Precal: {1} {2}", DateTime.Now.ToString(), curTilt.Minor/ 1000.00f, curTilt.Major);
                             float gravity = GetCalibrated(curTilt.Minor / 1000.00f, tilt.sgCali);
                             float temp = GetCalibrated(curTilt.Major, tilt.tempCali);
                             mainThreadWait = true;
@@ -113,12 +114,14 @@ namespace tilt_telephone
                 {
                     var lower = orderedCali[x];
                     var upper = orderedCali[x + 1];
+                    Console.WriteLine("Lower precal: {0}", lower.precal);
+                    Console.WriteLine("Upper precal: {0}", upper.precal);
 
                     var inMin = lower.precal;
                     var inMax = upper.precal;
                     var outMin = lower.corrected - lower.precal;
                     var outMax = upper.corrected - upper.precal;
-                    var correction = ((input - inMin) / (inMax - inMin)) * ((outMax - outMin) + outMin);
+                    var correction = (input - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
 
                     // if these "ifs" aren't met, then try the next pair by doing nothing
                     if (input <= lower.precal)
